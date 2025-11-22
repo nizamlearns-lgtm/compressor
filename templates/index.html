@@ -1,82 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>File Compressor</title>
+        <title>File Compressor</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <style>
-        body {
-            background: #f7f9fc;
-        }
-        .card {
-            border-radius: 14px;
-            padding: 25px;
-        }
-        .title {
-            font-weight: 600;
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
-        }
-    </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 
 <body>
 
-<div class="container" style="max-width: 600px; margin-top: 60px;">
-    <div class="card shadow">
-
-        <div class="title">Image & Video Compressor</div>
-
-        <form method="POST" enctype="multipart/form-data">
-
-            <!-- Upload input -->
-            <label class="form-label">Upload File</label>
-            <input type="file" name="file" class="form-control" required>
-
-            <!-- Compression Level -->
-            <label class="form-label mt-3">Compression Level</label>
-            <select name="quality" class="form-select" required>
-                <option value="high">High Quality (CRF 20)</option>
-                <option value="balanced" selected>Balanced (CRF 28)</option>
-                <option value="small">Small Size (CRF 30)</option>
-                <option value="xs">Extra Small (CRF 32)</option>
-            </select>
-
-            <!-- Codec -->
-            <label class="form-label mt-3">Codec</label>
-            <select name="codec" class="form-select" required>
-                <option value="h264">H.264 (Best Compatibility)</option>
-                <option value="h265" selected>H.265 (Smallest File Size)</option>
-            </select>
-
-            <!-- Resolution -->
-            <label class="form-label mt-3">Resolution</label>
-            <select name="resolution" class="form-select" required>
-                <option value="original" selected>Keep Original</option>
-                <option value="720p">720p</option>
-                <option value="480p">480p</option>
-                <option value="360p">360p</option>
-            </select>
-
-            <button class="btn btn-primary w-100 mt-4">
-                Compress
-            </button>
-        </form>
-
-        <div class="footer">
-            Your file will be automatically removed after 30 minutes.
+<!-- Navbar -->
+<nav class="top-nav">
+    <div class="nav-inner container-centered">
+        <div class="nav-brand">
+            <div class="logo-circle small">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="brand-text">Compressor</div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#" class="nav-cta" id="nav-try">Try</a>
         </div>
     </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="hero-inner container-centered">
+        <div class="hero-copy">
+            <h1 class="hero-title">Compress faster. Keep quality.</h1>
+            <p class="hero-sub">Smart image & video compression with an instant, beautiful UI — small files, big savings.</p>
+            <div class="hero-actions">
+                <a class="btn-modern hero-cta" id="hero-cta">Try It Now</a>
+                <a class="btn-ghost" href="#" onclick="window.scrollTo({top:document.querySelector('.glass-card').offsetTop-20,behavior:'smooth'})">Learn more</a>
+            </div>
+        </div>
+        <div class="hero-art">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="mock-device">
+                <img src="/static/uploads/placeholder.png" alt="mock" onerror="this.style.display='none'" />
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container-centered">
+    <div class="header">
+        <div class="logo-circle">
+            <!-- simple icon -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14" stroke="#0b66ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="title-block">
+            <div class="title">Image & Video Compressor</div>
+            <div class="subtitle">Upload, choose options, compress — neat and private.</div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <form method="POST" enctype="multipart/form-data">
+
+            <label class="form-label">Upload File</label>
+
+            <div class="dropzone" role="button" aria-label="Upload file dropzone">
+                <div class="muted">Drag & drop here, or click to browse</div>
+                <div class="file-name small-muted">No file chosen</div>
+                <img class="file-preview" style="display:none" alt="preview" />
+                <small class="small-muted">Supported: images & videos</small>
+            </div>
+
+            <div class="form-error text-danger" role="alert" aria-live="polite" style="display:none;margin-top:8px">Please select a file before compressing.</div>
+
+            <input type="file" name="file" class="form-control" style="display:none" required>
+
+            <div class="row controls">
+                <div class="col-md-4">
+                    <label class="form-label">Compression Level</label>
+                    <select name="quality" class="form-select">
+                        <option value="high">High Quality (CRF 20)</option>
+                        <option value="balanced" selected>Balanced (CRF 28)</option>
+                        <option value="small">Small Size (CRF 30)</option>
+                        <option value="xs">Extra Small (CRF 32)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Codec</label>
+                    <select name="codec" class="form-select">
+                        <option value="h264">H.264 (Best Compatibility)</option>
+                        <option value="h265" selected>H.265 (Smallest File Size)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Resolution</label>
+                    <select name="resolution" class="form-select">
+                        <option value="original" selected>Keep Original</option>
+                        <option value="720p">720p</option>
+                        <option value="480p">480p</option>
+                        <option value="360p">360p</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" id="compress-btn" class="btn-modern">Compress</button>
+                <button type="button" class="btn-ghost" onclick="document.querySelector('input[type=file]').value = ''; document.querySelector('.file-name').textContent='No file chosen'; document.querySelector('.file-preview').style.display='none'; document.getElementById('compress-btn').disabled = true; document.querySelector('.form-error').style.display='none'; document.getElementById('delete-upload-btn').style.display='none'">Reset</button>
+                <button type="button" id="delete-upload-btn" class="btn-ghost" style="display:none">Delete uploaded file</button>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress">
+                    <div class="bar"></div>
+                </div>
+
+                <!-- Circular progress with percentage -->
+                <div class="progress-circle" aria-hidden="true">
+                    <svg viewBox="0 0 120 120">
+                        <defs></defs>
+                        <circle class="progress-track" cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" />
+                        <circle class="progress-value" cx="60" cy="60" r="48" fill="none" stroke="url(#g1)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 60 60)" />
+                    </svg>
+                    <div class="progress-text">0%</div>
+                </div>
+            </div>
+
+            <div class="time-left small-muted" aria-live="polite">Time left: --:--</div>
+
+            <div class="small-muted">Your file is processed locally on the server and auto-deleted after 30 minutes.</div>
+
+        </form>
+    </div>
+
 </div>
+
+<!-- Floating, non-blocking loader shown while upload/processing runs -->
+<div class="loading-overlay" role="status" aria-live="polite">
+        <div class="loader-box">
+            <div class="spinner" aria-hidden="true"></div>
+            <div class="loading-text">Loading<span class="dots">...</span></div>
+            <button type="button" class="loader-cancel" title="Cancel">Cancel</button>
+        </div>
+</div>
+
+<script src="/static/js/ui.js"></script>
 
 </body>
 </html>

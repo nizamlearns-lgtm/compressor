@@ -100,3 +100,57 @@ def compress_video(path, quality="balanced", codec="h265", resolution="original"
 
     subprocess.run(cmd, check=True)
     return out_path
+
+
+def get_duration(path):
+    """Return duration in seconds (float) using ffprobe, or None on error."""
+    ffprobe = shutil.which("ffprobe")
+    if not ffprobe:
+        return None
+    try:
+        res = subprocess.run([
+            ffprobe, "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            path
+        ], capture_output=True, text=True, check=True)
+        out = res.stdout.strip()
+        return float(out) if out else None
+    except Exception:
+        return None
+
+
+def start_video_compression_async(path, out_path, quality="balanced", codec="h265", resolution="original", progress_file=None):
+    """Start ffmpeg as a background process writing progress to `progress_file`.
+    Returns the Popen object.
+    """
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        raise RuntimeError("ffmpeg not found. Install from ffmpeg.org and add to PATH.")
+
+    crf = get_crf(quality)
+    scale = get_scale_filter(resolution)
+    vcodec = "libx265" if codec == "h265" else "libx264"
+
+    cmd = [
+        ffmpeg, "-y",
+        "-i", path,
+        "-c:v", vcodec,
+        "-crf", str(crf),
+        "-preset", "medium",
+        "-c:a", "aac",
+        "-b:a", "96k",
+    ]
+
+    if scale:
+        cmd.extend(["-vf", scale])
+
+    # progress file
+    if progress_file:
+        cmd.extend(["-progress", progress_file, "-nostats"])
+
+    cmd.append(out_path)
+
+    # start process
+    proc = subprocess.Popen(cmd)
+    return proc
